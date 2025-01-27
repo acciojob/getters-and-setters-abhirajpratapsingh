@@ -1,38 +1,69 @@
-import { Person, Student, Teacher } from './person';
-
 describe('example to-do app', () => {
   it('should get the name', () => {
-    const person = new Person("John", 25);
-    expect(person.name).to.equal('John');
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      const Person = win.Person;
+      const person = new Person("John", 25);
+      expect(person.name).to.equal("John");
+    });
   });
 
   it('should change age', () => {
-    const person = new Person("John", 25);
-    person.age = 30;
-    expect(person._age).to.equal(30);
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      const Person = win.Person;
+      const person = new Person("John", 25);
+      expect(person._name).to.equal("John");
+      person.age = 30;
+      expect(person._age).to.equal(30);
+    });
   });
 
   it('John should study', () => {
-    const student = new Student("John", 25);
-    cy.stub(student, 'study').callsFake(() => console.log('John is studying'));
-    student.study();
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      cy.stub(win.console, "log").as("consoleLog");
+      const Student = win.Student;
+      const student = new Student("John", 30);
+      expect(student.name).to.equal("John");
+      student.study();
+      cy.get("@consoleLog").should("be.calledWith", `${student.name} is studying`);
+    });
   });
 
   it('Alice should study', () => {
-    const student = new Student("Alice", 22);
-    cy.stub(student, 'study').callsFake(() => console.log('Alice is studying'));
-    student.study();
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      cy.stub(win.console, "log").as("consoleLog");
+      const Student = win.Student;
+      const student = new Student("Alice", 30);
+      expect(student.name).to.equal("Alice");
+      student.study();
+      cy.get("@consoleLog").should("be.calledWith", `${student.name} is studying`);
+    });
   });
 
   it('John should teach', () => {
-    const teacher = new Teacher("John", 25);
-    cy.stub(teacher, 'teach').callsFake(() => console.log('John is teaching'));
-    teacher.teach();
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      cy.stub(win.console, "log").as("consoleLog");
+      const Teacher = win.Teacher;
+      const teacher = new Teacher("John", 30);
+      expect(teacher.name).to.equal("John");
+      teacher.teach();
+      cy.get("@consoleLog").should("be.calledWith", `${teacher.name} is teaching`);
+    });
   });
 
   it('Alice should teach', () => {
-    const teacher = new Teacher("Alice", 22);
-    cy.stub(teacher, 'teach').callsFake(() => console.log('Alice is teaching'));
-    teacher.teach();
+    cy.visit(baseUrl + "/main.html");
+    cy.window().then(win => {
+      cy.stub(win.console, "log").as("consoleLog");
+      const Teacher = win.Teacher;
+      const teacher = new Teacher("Alice", 30);
+      expect(teacher.name).to.equal("Alice");
+      teacher.teach();
+      cy.get("@consoleLog").should("be.calledWith", `${teacher.name} is teaching`);
+    });
   });
 });
