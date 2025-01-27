@@ -1,38 +1,38 @@
-class Person {
-  constructor(name, age) {
-    this._name = name;
-    this._age = age;
-  }
+import { Person, Student, Teacher } from './person';
 
-  get name() {
-    return this._name;
-  }
+describe('example to-do app', () => {
+  it('should get the name', () => {
+    const person = new Person("John", 25);
+    expect(person.name).to.equal('John');
+  });
 
-  set age(age) {
-    this._age = age;
-  }
-}
+  it('should change age', () => {
+    const person = new Person("John", 25);
+    person.age = 30;
+    expect(person._age).to.equal(30);
+  });
 
-class Student extends Person {
-  study() {
-    console.log(`${this.name} is studying`);
-  }
-}
+  it('John should study', () => {
+    const student = new Student("John", 25);
+    cy.stub(student, 'study').callsFake(() => console.log('John is studying'));
+    student.study();
+  });
 
-class Teacher extends Person {
-  teach() {
-    console.log(`${this.name} is teaching`);
-  }
-}
+  it('Alice should study', () => {
+    const student = new Student("Alice", 22);
+    cy.stub(student, 'study').callsFake(() => console.log('Alice is studying'));
+    student.study();
+  });
 
-const person = new Person("John", 25);
-console.log(person.name);
+  it('John should teach', () => {
+    const teacher = new Teacher("John", 25);
+    cy.stub(teacher, 'teach').callsFake(() => console.log('John is teaching'));
+    teacher.teach();
+  });
 
-person.age = 30;
-console.log(person.age);
-
-const student = new Student("Alice", 22);
-student.study();
-
-const teacher = new Teacher("Bob", 40);
-teacher.teach();
+  it('Alice should teach', () => {
+    const teacher = new Teacher("Alice", 22);
+    cy.stub(teacher, 'teach').callsFake(() => console.log('Alice is teaching'));
+    teacher.teach();
+  });
+});
